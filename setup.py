@@ -11,4 +11,4 @@ if sys.platform == "win32":
     base = "Win32GUI"
 
 setup(name="Setup", version="0.1", description="Good Morning application!", options={"build_exe": build_exe_options},
-      executables=[Executable("__main__.py")])  # , base=base)])
+      executables=[Executable('make_config.py')])  # , base=base)])
