@@ -2,6 +2,7 @@ import configparser
 import ListPreparation
 import itpc_utils
 from ITPCBrowser import ITPCBrowser
+import make_config
 
 
 def main():
@@ -25,4 +26,6 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    make_config.make_config('edit_creds', 'B201001415', 'B201001415')
+    #make_config.make_config('edit_oper', 'KL', 'THIRUVANANTHAPURAM', ['TVMMNK', 'TVMTPK'])

@@ -33,6 +33,15 @@ def make_config(task, *argv):
         config.set('OPERATIONAL PARAMETERS', 'circle', argv[0])
         config.set('OPERATIONAL PARAMETERS', 'ssa', argv[1])
         config.set('OPERATIONAL PARAMETERS', 'Exchanges', argv[2])
+    elif task == 'edit_creds':
+        _ = config.read('config.ini')
+        config.set('CREDENTIALS', 'username', argv[0])
+        config.set('CREDENTIALS', 'password', argv[1])
+    elif task == 'edit_oper':
+        _ = config.read('config.ini')
+        config.set('OPERATIONAL PARAMETERS', 'circle', argv[0])
+        config.set('OPERATIONAL PARAMETERS', 'ssa', argv[1])
+        config.set('OPERATIONAL PARAMETERS', 'Exchanges', argv[2])
     save_config()
 
 
