@@ -40,7 +40,13 @@ class Config:
             self.password = config['CREDENTIALS']['password']
             self.circle = config['OPERATIONAL PARAMETERS']['circle']
             self.ssa = config['OPERATIONAL PARAMETERS']['ssa']
-            self.exchanges = config['OPERATIONAL PARAMETERS']['Exchanges'].split(',')
+            self.exchanges = config['OPERATIONAL PARAMETERS']['Exchanges']
             return True
         else:
             return False
+
+    def show_config(self):
+        print('Username: {}'.format(self.username))
+        print('Circle: {}'.format(self.circle))
+        print('SSA: {}'.format(self.ssa))
+        print('Exchanges: {}'.format(self.exchanges))
