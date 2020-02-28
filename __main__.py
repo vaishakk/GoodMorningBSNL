@@ -1,7 +1,7 @@
 import ListPreparation
 import itpc_utils
 from ITPCBrowser import ITPCBrowser
-from make_config import Config
+from Config import Config
 import os
 
 
@@ -10,16 +10,16 @@ config_file = os.path.join(os.path.expanduser('~')+'\.GM\config.ini')
 
 
 def main():
-    os.rmdir(download_dir)  # Clear all previous files
+    if os.path.exists(download_dir):
+        os.rmdir(download_dir)  # Clear all previous files
     config = Config(config_file)
     if config.read_config():
         browser = ITPCBrowser(config.username, config.password)
-        browser.set_params(circle=config.circle, ssa=config.ssa, exgs=config.exgs)
+        browser.set_params(circle=config.circle, ssa=config.ssa, exgs=config.exchanges)
         browser.pipeline()
-        ListPreparation.write_list(exgs=config.exgs, download_dir=download_dir)
+        ListPreparation.write_list(exgs=config.exchanges, download_dir=download_dir)
     else:
-        print("ITPC username and password and exchange codes need to set before starting."
-              " PRESS ANY KEY to continue...")
+        print("ITPC username and password and exchange codes need to set before starting.")
         # _ = input()
         username = input("Enter ITPC Username: ")
         password = input("Enter ITPC password: ")
@@ -37,6 +37,7 @@ def main():
             exgs += exg + ','
         exgs = exgs[:-2] # Remove the blank entry
         config.set_oper(circle, ssa, exgs)
+        config.save_config()
         main()
         return
 
