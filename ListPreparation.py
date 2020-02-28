@@ -10,8 +10,8 @@ def prepare_list(exgs=[], cols=[], filename=''):
     return fltData
 
 
-def write_list(exgs=[], cols=[]):
-    download_dir = os.path.join(os.path.expanduser('~')+'\.GM')
+def write_list(exgs=[], download_dir=''):
+
     ll_cols = ["Exchange", "Phone No", "Fault Booked Date", "Complaint Sub Type", "Workgroup", "Vertical", "Pillar",
                "Customer Name", "House No", "Village", "Additional Details", "Mobile No"]
     ftth_cols = ["Exchange", "Phone No", "Booked Date", "Customer Name", "House No", "Village Name",

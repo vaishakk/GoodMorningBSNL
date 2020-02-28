@@ -1,31 +1,29 @@
-import configparser
 import ListPreparation
 import itpc_utils
 from ITPCBrowser import ITPCBrowser
-import make_config
+from make_config import Config
+import os
+
+
+download_dir = os.path.join(os.path.expanduser('~')+'\.GM\Downloads')
+config_file = os.path.join(os.path.expanduser('~')+'\.GM\config.ini')
 
 
 def main():
-    config = configparser.RawConfigParser()
-    files = config.read('config.ini')
-    if len(files):
-        username = config['CREDENTIALS']['username']
-        password = config['CREDENTIALS']['password']
-        circle = config['OPERATIONAL PARAMETERS']['circle']
-        ssa = config['OPERATIONAL PARAMETERS']['ssa']
-        exgs = config['OPERATIONAL PARAMETERS']['Exchanges'].split(',')
-        print(exgs)
-        browser = ITPCBrowser(username, password)
-        browser.set_params(circle=circle, ssa=ssa, exgs=exgs)
+    os.rmdir(download_dir)  # Clear all previous files
+    config = Config(config_file)
+    if config.read_config():
+        browser = ITPCBrowser(config.username, config.password)
+        browser.set_params(circle=config.circle, ssa=config.ssa, exgs=config.exgs)
         browser.pipeline()
-        ListPreparation.write_list(exgs=exgs)
+        ListPreparation.write_list(exgs=config.exgs, download_dir=download_dir)
     else:
         print("ITPC username and password and exchange codes need to set before starting."
               " PRESS ANY KEY to continue...")
         # _ = input()
         username = input("Enter ITPC Username: ")
         password = input("Enter ITPC password: ")
-        make_config.make_config('set_creds', username, password)
+        config.set_creds(username, password)
         print("Enter circle code, ssa name and exchange codes one-by-one as given in ITPC (Ex: For "
               "Kariyavattom exchange Circle code is KL, SSA name is THIRUVANANTHAPURAM and exchange code is TVMKVT)")
         circle = input('Enter Circle code: ')
@@ -38,7 +36,7 @@ def main():
             k += 1
             exgs += exg + ','
         exgs = exgs[:-2] # Remove the blank entry
-        make_config.make_config('set_oper', circle, ssa, exgs)
+        config.set_oper(circle, ssa, exgs)
         main()
         return
 

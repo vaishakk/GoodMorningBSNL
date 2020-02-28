@@ -1,49 +1,46 @@
 import configparser
 
-config = configparser.RawConfigParser()
 
+class Config:
 
-def save_config():
-    with open('config.ini', 'w') as configfile:
-        config.write(configfile)
+    def __init__(self, config_file):
+        self.username = ''
+        self.password = ''
+        self.circle = ''
+        self.ssa = ''
+        self.exchanges = ''
+        self.file = config_file
 
-
-def make_config(task, *argv):
-    """
-    Usage: make_config(task, list_of_args)
-    task: 1. set_creds - Set ITPC username and password.
-             Usage: make_config('set_creds', <username>, <password>)
-             Ex: make_config('set_creds', 'B20xxxxxxx', 'B20xxxxxxx')
-          2. set_oper - Set operational parameters like Circle, SSA and Exchanges.
-             Usage: make_config('set_oper', <Circle code>, <SSA name>, <List of exchanges>)
-             Ex: make_config('set_oper', 'KL', 'THIRUVANANTHAPURAM', ['TVMKVT', 'TVMTPK'])
-          3. edit_creds - Change ITPC username and password.
-             Usage: make_config('edit_creds', <username>, <password>)
-             Ex: make_config('edit_creds', 'B20xxxxxxx', 'B20xxxxxxx')
-          4. edit_oper - Change operational parameters like Circle, SSA and Exchanges.
-             Usage: make_config('edit_oper', <Circle code>, <SSA name>, <List of exchanges>)
-             Ex: make_config('edit_oper', 'KL', 'THIRUVANANTHAPURAM', ['TVMKVT', 'TVMTPK'])
-    """
-    if task == 'set_creds':
+    def save_config(self):
+        config = configparser.RawConfigParser()
         config.add_section('CREDENTIALS')
-        config.set('CREDENTIALS', 'username', argv[0])
-        config.set('CREDENTIALS', 'password', argv[1])
-    elif task == 'set_oper':
+        config.set('CREDENTIALS', 'username', self.username)
+        config.set('CREDENTIALS', 'password', self.password)
         config.add_section('OPERATIONAL PARAMETERS')
-        config.set('OPERATIONAL PARAMETERS', 'circle', argv[0])
-        config.set('OPERATIONAL PARAMETERS', 'ssa', argv[1])
-        config.set('OPERATIONAL PARAMETERS', 'Exchanges', argv[2])
-    elif task == 'edit_creds':
-        _ = config.read('config.ini')
-        config.set('CREDENTIALS', 'username', argv[0])
-        config.set('CREDENTIALS', 'password', argv[1])
-    elif task == 'edit_oper':
-        _ = config.read('config.ini')
-        config.set('OPERATIONAL PARAMETERS', 'circle', argv[0])
-        config.set('OPERATIONAL PARAMETERS', 'ssa', argv[1])
-        config.set('OPERATIONAL PARAMETERS', 'Exchanges', argv[2])
-    save_config()
+        config.set('OPERATIONAL PARAMETERS', 'circle', self.circle)
+        config.set('OPERATIONAL PARAMETERS', 'ssa', self.ssa)
+        config.set('OPERATIONAL PARAMETERS', 'Exchanges', self.exchanges)
+        with open(self.file, 'w') as configfile:
+            config.write(configfile)
 
+    def set_creds(self, username, password):
+        self.username = username
+        self.password = password
 
-if __name__ == "__main__":
-    pass
+    def set_oper(self, circle, ssa, exgs):
+        self.circle = circle
+        self.ssa = ssa
+        self.exchanges = exgs
+
+    def read_config(self):
+        config = configparser.RawConfigParser()
+        files = config.read(self.file)
+        if len(files):
+            self.username = config['CREDENTIALS']['username']
+            self.password = config['CREDENTIALS']['password']
+            self.circle = config['OPERATIONAL PARAMETERS']['circle']
+            self.ssa = config['OPERATIONAL PARAMETERS']['ssa']
+            self.exchanges = config['OPERATIONAL PARAMETERS']['Exchanges'].split(',')
+            return True
+        else:
+            return False
