@@ -21,8 +21,11 @@ def write_list(exgs=[], download_dir=''):
     ftth_list = prepare_list(exgs=exgs, cols=ftth_cols, filename=ftth_file)
     ll_list = prepare_list(exgs=exgs, cols=ll_cols, filename=ll_file)
     current_time = datetime.now().strftime("%d_%m_%Y_%H%M%S")
-    dl_path = os.path.join(os.environ['userprofile'], 'Desktop\\Faults_{}.xlsx'.format(current_time))
-    with pd.ExcelWriter(dl_path) as writer:
+
+    dl_path = os.path.join(os.environ['userprofile'], 'Desktop\\Daily_Faults')
+    if not os.path.exists(dl_path):
+        os.mkdir(dl_path)
+    with pd.ExcelWriter(os.path.join(dl_path, 'Faults_{}.xlsx'.format(current_time))) as writer:
         ftth_list.to_excel(writer, 'FTTH')
         ll_list.to_excel(writer, 'LL+BB')
     os.remove(ftth_file)
