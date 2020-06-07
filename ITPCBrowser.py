@@ -22,7 +22,7 @@ class ITPCBrowser:
     def login(self, username, password):
         url = 'http://10.196.215.54:7777/pls/apex/f?p=204:1'
         options = ChromeOptions()
-        download_dir = os.path.join(os.path.expanduser('~')+'\.GM')
+        download_dir = os.path.join(os.path.expanduser('~')+'\.GM\Downloads')
         options.add_experimental_option('prefs', {'download.default_directory': download_dir})
         browser = webdriver.Chrome(chrome_options=options)
         browser.get(url)  # navigate to the page

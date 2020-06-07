@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+from datetime import datetime
 
 
 def prepare_list(exgs=[], cols=[], filename=''):
@@ -9,8 +10,8 @@ def prepare_list(exgs=[], cols=[], filename=''):
     return fltData
 
 
-def write_list(exgs=[], cols=[]):
-    download_dir = os.path.join(os.path.expanduser('~')+'\.GM')
+def write_list(exgs=[], download_dir=''):
+
     ll_cols = ["Exchange", "Phone No", "Fault Booked Date", "Complaint Sub Type", "Workgroup", "Vertical", "Pillar",
                "Customer Name", "House No", "Village", "Additional Details", "Mobile No"]
     ftth_cols = ["Exchange", "Phone No", "Booked Date", "Customer Name", "House No", "Village Name",
@@ -19,8 +20,12 @@ def write_list(exgs=[], cols=[]):
     ll_file = os.path.join(download_dir+'\Pending faults Details.csv')
     ftth_list = prepare_list(exgs=exgs, cols=ftth_cols, filename=ftth_file)
     ll_list = prepare_list(exgs=exgs, cols=ll_cols, filename=ll_file)
-    dl_path = os.path.join(os.environ['userprofile'], 'Desktop\\GM.xlsx')
-    with pd.ExcelWriter(dl_path) as writer:
+    current_time = datetime.now().strftime("%d_%m_%Y_%H%M%S")
+
+    dl_path = os.path.join(os.environ['userprofile'], 'Desktop\\Daily_Faults')
+    if not os.path.exists(dl_path):
+        os.mkdir(dl_path)
+    with pd.ExcelWriter(os.path.join(dl_path, 'Faults_{}.xlsx'.format(current_time))) as writer:
         ftth_list.to_excel(writer, 'FTTH')
         ll_list.to_excel(writer, 'LL+BB')
     os.remove(ftth_file)
